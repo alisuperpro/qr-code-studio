@@ -12,7 +12,8 @@
   "app": {
     "windows": [
       {
-        "title": "cm-qr-generator",
+        "title": "Generador de QR",
+        "center": true,
         "width": 800,
         "height": 600
       }
