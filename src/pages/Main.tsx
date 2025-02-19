@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { open } from '@tauri-apps/plugin-dialog'
 import { SelectExt } from '@/components/SelectExt'
-import { QrIcon } from '@/icons/QrIcon'
-import { LoaderIcon } from '@/icons/LoaderIcon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
+import { exists } from '@tauri-apps/plugin-fs'
+import * as path from '@tauri-apps/api/path'
+import { LoaderCircle, QrCode } from 'lucide-react'
 
 export const Main = () => {
   const [name, setName] = useState('QR')
@@ -16,8 +17,8 @@ export const Main = () => {
   const { toast } = useToast()
 
   const createQR = async (name: string, url: string) => {
-    setIsLoad(true)
     const directory = await findDirectory()
+    setIsLoad(true)
 
     const fileName = `${name}${ext}`
 
@@ -26,24 +27,59 @@ export const Main = () => {
       toast({
         title: 'Error',
         description: `Carpeta no seleccionada (${directory})`,
-        duration: 1000,
+        duration: 2000,
       })
       setIsLoad(false)
       return
-    } else {
-      await invoke('create_qr', {
+    }
+
+    const filePath = await path.join(directory, fileName)
+    const isExistFileInPath = await isExistFile(filePath)
+
+    if (isExistFileInPath === false) {
+      const result = await invoke('create_qr', {
         name: fileName,
         qrContent: url,
         path: `${directory}/`,
       })
+
+      if (result === null) {
+        toast({
+          title: 'QR Creado',
+          description: `El QR ha sido creado con exito.`,
+          duration: 2000,
+        })
+      }
+    } else {
+      const id = Math.floor(Math.random() * 1000)
+      const rename = fileName.replace(name, `${name}-${id}`)
+      const result = await invoke('create_qr', {
+        name: rename,
+        qrContent: url,
+        path: `${directory}/`,
+      })
+
+      if (result === null) {
+        toast({
+          title: 'QR Creado',
+          description: `El QR ha sido creado con exito.`,
+          duration: 2000,
+        })
+      }
     }
     setIsLoad(false)
+  }
+
+  const isExistFile = async (path: string) => {
+    const isExist = await exists(path)
+
+    return isExist
   }
 
   const findDirectory = async () => {
     const file = await open({
       multiple: false,
-      directory: false,
+      directory: true,
       canCreateDirectories: true,
     })
 
@@ -65,6 +101,7 @@ export const Main = () => {
           <form className="flex flex-col gap-y-2" onSubmit={submitQR}>
             <div className="w-full flex flex-row gap-x-2 justify-center items-center">
               <Input
+                required={true}
                 value={name}
                 onChange={(event) => {
                   setName(event.target.value)
@@ -73,17 +110,19 @@ export const Main = () => {
               <SelectExt
                 onValueChange={async (value) => setExt(value)}
                 value={ext}
+                required={true}
               />
             </div>
 
             <Input
+              required={true}
               placeholder="URL"
               onChange={(event) => setURL(event.target.value)}
               value={url}
             />
             <Button disabled={isLoad}>
               Crear{' '}
-              {isLoad ? <LoaderIcon className="animate-spin" /> : <QrIcon />}
+              {isLoad ? <LoaderCircle className="animate-spin" /> : <QrCode />}
             </Button>
           </form>
         </div>

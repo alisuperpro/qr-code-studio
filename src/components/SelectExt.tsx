@@ -4,9 +4,11 @@ import { extList } from '@/utils/extList'
 export const SelectExt = ({
   onValueChange,
   value,
+  required,
 }: {
   onValueChange: (value: any) => {}
   value: string
+  required: boolean
 }) => {
   return (
     <SelectComp
@@ -16,6 +18,7 @@ export const SelectExt = ({
       itemsPlaceholder="Extenciones"
       onValueChange={(value) => onValueChange(value)}
       value={value}
+      required={required}
     />
   )
 }

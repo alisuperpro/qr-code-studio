@@ -15,6 +15,7 @@ export function SelectComp({
   items,
   itemsPlaceholder,
   value,
+  required,
 }: {
   onValueChange: (value: any) => {}
   defaultValue: string
@@ -22,12 +23,14 @@ export function SelectComp({
   items: LabelValue[]
   itemsPlaceholder: string
   value: string
+  required: boolean
 }) {
   return (
     <Select
       onValueChange={onValueChange}
       defaultValue={defaultValue}
       value={value}
+      required={required}
     >
       <SelectTrigger className="w-[220px]">
         <SelectValue placeholder={placeholder} />
