@@ -3,7 +3,7 @@ use image::Luma;
 use qrcode::QrCode;
 
 #[tauri::command]
-fn create_qr(name: &str, qr_content: &str, path: &str) -> Result<(), String> {
+fn create_qr(qr_content: &str, path: &str) -> Result<(), String> {
     let code = match QrCode::new(qr_content.as_bytes()) {
         Ok(code) => code,
         Err(err) => return Err(format!("Error al crear el código QR: {}", err)),
@@ -11,7 +11,7 @@ fn create_qr(name: &str, qr_content: &str, path: &str) -> Result<(), String> {
 
     let image = code.render::<Luma<u8>>().build();
 
-    let qr_path = path.to_owned() + name;
+    let qr_path = path.to_owned();
     if let Err(err) = image.save(&qr_path) {
         return Err(format!("Error al guardar la imagen QR: {}", err));
     }
