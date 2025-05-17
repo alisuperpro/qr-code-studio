@@ -9,16 +9,27 @@ export const useQr = () => {
   const { isExistFile } = useFs()
 
   const createQR = async ({
-    url,
+    content,
     setIsLoad,
     customImage,
   }: {
-    url: string
+    content: string | undefined
     setIsLoad: any
     customImage: any
   }) => {
     const file = await saveImage()
     setIsLoad(true)
+
+    if (!content) {
+      setIsLoad(false)
+      toast({
+        title: 'Error',
+        description: `No hay contenido`,
+        duration: 2000,
+      })
+      setIsLoad(false)
+      return
+    }
 
     if (file === null) {
       setIsLoad(false)
@@ -36,7 +47,7 @@ export const useQr = () => {
     if (isExistFileInPath === false) {
       if (customImage === null) {
         const result = await invoke('create_qr', {
-          qrContent: url,
+          qrContent: content,
           path: file,
         })
 
@@ -49,7 +60,7 @@ export const useQr = () => {
         }
       } else {
         const result = await invoke('qr_with_logo', {
-          content: url,
+          content: content,
           logoPath: customImage,
           qrPath: file,
         })
