@@ -1,18 +1,19 @@
 import { Main } from '@/pages/Main'
 import { SettingsPage } from '@/pages/Settings'
 import { Route, Switch } from 'wouter'
-import { QrOptions } from './pages/QrOptions'
-import { QrUrl } from '@/components/QrUrl'
 import { Footer } from '@/components/Footer'
+import { Studio } from './pages/Studio'
 
 function App() {
   return (
     <>
       <div className="w-full h-screen flex flex-col">
-        <div className="flex flex-1">
+        <div className="flex flex-1 h-full">
           <Router />
         </div>
-        <Footer />
+        <div className="h-min flex py-2">
+          <Footer />
+        </div>
       </div>
     </>
   )
@@ -24,8 +25,7 @@ export const Router = () => {
       <Switch>
         <Route path="/" component={Main} />
         <Route path="/settings" component={SettingsPage} />
-        <Route path="/qr-options" component={QrOptions} />
-        <Route path="/studio" component={QrUrl} />
+        <Route path="/studio/*" component={Studio} />
       </Switch>
     </>
   )
