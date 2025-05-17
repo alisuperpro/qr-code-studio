@@ -25,7 +25,7 @@ export const Router = () => {
         <Route path="/" component={Main} />
         <Route path="/settings" component={SettingsPage} />
         <Route path="/qr-options" component={QrOptions} />
-        <Route path="/qr-url" component={QrUrl} />
+        <Route path="/studio" component={QrUrl} />
       </Switch>
     </>
   )
