@@ -1,115 +1,19 @@
 import { useState } from 'react'
-import { invoke } from '@tauri-apps/api/core'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useToast } from '@/hooks/use-toast'
-import { exists } from '@tauri-apps/plugin-fs'
 import { ClipboardPaste, LoaderCircle, QrCode } from 'lucide-react'
-import { save, open } from '@tauri-apps/plugin-dialog'
 import { Label } from './ui/label'
-import { readText } from '@tauri-apps/plugin-clipboard-manager'
+import { useDialog } from '@/hooks/useDialog'
+import { useClipboard } from '@/hooks/useClipboard'
+import { useQr } from '@/hooks/useQr'
 
 export const QrUrl = () => {
   const [url, setURL] = useState('')
   const [customImage, setCustomImage] = useState<String | null>(null)
   const [isLoad, setIsLoad] = useState(false)
-  const { toast } = useToast()
-
-  const createQR = async (url: string) => {
-    const file = await saveFile()
-    setIsLoad(true)
-
-    if (file === null) {
-      setIsLoad(false)
-      toast({
-        title: 'Error',
-        description: `Ruta no encontrada (${file})`,
-        duration: 2000,
-      })
-      setIsLoad(false)
-      return
-    }
-
-    const isExistFileInPath = await isExistFile(file)
-
-    if (isExistFileInPath === false) {
-      console.log({ customImage })
-      if (customImage === null) {
-        const result = await invoke('create_qr', {
-          qrContent: url,
-          path: file,
-        })
-
-        if (result === null) {
-          toast({
-            title: 'QR Creado',
-            description: `El QR ha sido creado con exito.`,
-            duration: 2000,
-          })
-        }
-      } else {
-        const result = await invoke('qr_with_logo', {
-          content: url,
-          logoPath: customImage,
-          qrPath: file,
-        })
-        console.log(result)
-        if (result === null) {
-          toast({
-            title: 'QR Creado',
-            description: `El QR ha sido creado con exito.`,
-            duration: 2000,
-          })
-        }
-      }
-    } else {
-    }
-    setIsLoad(false)
-  }
-
-  const selectLogo = async () => {
-    const selected = await open({
-      multiple: false,
-      filters: [
-        {
-          name: 'Image',
-          extensions: ['png', 'jpeg'],
-        },
-      ],
-    })
-    console.log(selected)
-
-    return selected
-  }
-
-  const saveFile = async () => {
-    const filePath = await save({
-      filters: [
-        {
-          name: 'Image',
-          extensions: ['png', 'jpeg'],
-        },
-      ],
-    })
-
-    console.log(filePath)
-    return filePath
-  }
-  const isExistFile = async (path: string) => {
-    const isExist = await exists(path)
-
-    return isExist
-  }
-
-  /* const findDirectory = async () => {
-    const file = await open({
-      multiple: false,
-      directory: true,
-      canCreateDirectories: true,
-    })
-
-    return file
-  } */
+  const { pasteText } = useClipboard()
+  const { selectLogo } = useDialog()
+  const { createQR } = useQr()
 
   const selectCustomImage = async (event: any) => {
     event.preventDefault()
@@ -120,13 +24,7 @@ export const QrUrl = () => {
 
   const submitQR = async (event: any) => {
     event.preventDefault()
-    createQR(url)
-  }
-
-  const pasteText = async () => {
-    const clipboardText = await readText()
-
-    return clipboardText
+    createQR({ url, setIsLoad, customImage })
   }
 
   const pasteLink = async (event: any) => {
