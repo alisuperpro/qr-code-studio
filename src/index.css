@@ -660,6 +660,10 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -694,6 +698,10 @@ body {
 
 .h-5 {
   height: 1.25rem;
+}
+
+.h-60 {
+  height: 15rem;
 }
 
 .h-8 {
@@ -735,6 +743,10 @@ body {
 
 .max-h-40 {
   max-height: 10rem;
+}
+
+.max-h-60 {
+  max-height: 15rem;
 }
 
 .max-h-96 {
@@ -1057,6 +1069,14 @@ body {
 
 .pt-0 {
   padding-top: 0px;
+}
+
+.pt-16 {
+  padding-top: 4rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
 }
 
 .text-5xl {
