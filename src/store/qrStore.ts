@@ -5,6 +5,7 @@ type contentType = string | undefined
 interface useQrStoreType {
   content: contentType
   setContent: (content: contentType) => void
+  removeContent: () => void
 }
 
 export const useQrStore = create<useQrStoreType>((set) => {
@@ -12,6 +13,9 @@ export const useQrStore = create<useQrStoreType>((set) => {
     content: '',
     setContent: (content) => {
       set({ content })
+    },
+    removeContent: () => {
+      set({ content: '' })
     },
   }
 })

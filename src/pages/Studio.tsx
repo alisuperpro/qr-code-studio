@@ -1,3 +1,4 @@
+import { QrEmail } from '@/components/QrEmail'
 import { QrOptions } from '@/components/QrOptions'
 import { QrText } from '@/components/QrText'
 import { QrUrl } from '@/components/QrUrl'
@@ -21,7 +22,7 @@ export const Studio = () => {
 
   return (
     <section className="w-full h-full">
-      <div className="border-2">
+      <div className="">
         <QrOptions />
       </div>
 
@@ -51,6 +52,7 @@ const StudioRouter = () => {
       <Router base="/studio">
         <Route path="/" component={QrUrl} />
         <Route path="/text" component={QrText} />
+        <Route path="/email" component={QrEmail} />
       </Router>
     </>
   )
