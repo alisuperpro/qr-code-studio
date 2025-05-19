@@ -18,6 +18,7 @@ export const Footer = () => {
         | null
         | undefined
       link: string
+      id: string
     },
   ] = [
     {
@@ -25,12 +26,14 @@ export const Footer = () => {
       size: 'icon',
       variant: 'secondary',
       link: '/',
+      id: 'home',
     },
     {
       icon: QrCode,
       size: 'icon',
       variant: 'secondary',
-      link: '/studio',
+      link: '/studio/',
+      id: 'studio',
     },
   ]
 
@@ -40,7 +43,7 @@ export const Footer = () => {
         {options.map((opt) => {
           const Icon = opt.icon
           return (
-            <Link href={opt.link}>
+            <Link href={opt.link} key={opt.id}>
               <Button size={opt.size} variant={opt.variant}>
                 <Icon />
               </Button>
