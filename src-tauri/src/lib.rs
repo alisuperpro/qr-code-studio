@@ -1,24 +1,71 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use image::imageops::FilterType; // Import for resizing filter
 use image::GenericImage;
-use image::GenericImageView; // Import for width and height
-use image::{DynamicImage, ImageBuffer, Luma};
+use image::GenericImageView;
+use image::ImageError;
+// Import for width and height
+use image::{DynamicImage, Luma};
 use qrcode::{EcLevel, QrCode, Version};
+use std::path::PathBuf;
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+pub struct QrOptions {
+    pub content: String,
+    pub path: String,
+    pub level: String,
+    pub size: u32,
+    pub version: i16
+}
+
 #[tauri::command]
-fn create_qr(qr_content: &str, path: &str) -> Result<(), String> {
-    let code = match QrCode::new(qr_content.as_bytes()) {
-        Ok(code) => code,
-        Err(err) => return Err(format!("Error al crear el código QR: {}", err)),
+fn create_qr(options: QrOptions) -> Result<(), String>{
+    // Convertir el nivel de string a EcLevel
+    let ec_level = match options.level.to_uppercase().as_str() {
+        "L" => EcLevel::L,
+        "M" => EcLevel::M,
+        "Q" => EcLevel::Q,
+        "H" => EcLevel::H,
+        _ => return Err(format!("Nivel de corrección de errores no válido: {}", options.level)),
     };
 
-    let image = code.render::<Luma<u8>>().build();
 
-    let qr_path = path.to_owned();
-    if let Err(err) = image.save(&qr_path) {
-        return Err(format!("Error al guardar la imagen QR: {}", err));
+    // Mapear la versión opcional a Option<Version>
+    let mut version;
+    let mut code;
+    
+    if (1..=40).contains(&options.version) {
+        version = Version::Normal(options.version);
+        code = match QrCode::with_version(options.content.as_bytes(), version, ec_level) {
+        Ok(code) => code,
+        Err(err) => return Err(format!("Error al crear el código QR con nivel de corrección {:?}: {}", ec_level, err)),
+    };
+    } else {
+        code = match QrCode::with_error_correction_level(options.content.as_bytes(), ec_level) {
+        Ok(code) => code,
+        Err(err) => return Err(format!("Error al crear el código QR con nivel de corrección {:?}: {}", ec_level, err)),
+    };
     }
 
-    Ok(())
+
+    // Crear el código QR con el nivel de corrección especificado
+    /* let code = match QrCode::with_version(options.content.as_bytes(), Version::Normal(options.version.try_into().unwrap()), ec_level) {
+        Ok(code) => code,
+        Err(err) => return Err(format!("Error al crear el código QR con nivel de corrección {:?}: {}", ec_level, err)),
+    }; */
+
+    // Renderizar la imagen con el tamaño especificado
+    let image = code.render::<Luma<u8>>().max_dimensions(options.size, options.size).build();
+
+    // Convertir la ruta a PathBuf
+    let qr_path = PathBuf::from(&options.path);
+
+    // Guardar la imagen en la ruta especificada
+    match image.save(&qr_path) {
+        Ok(_) => Ok(()),
+        Err(ImageError::IoError(err)) => Err(format!("Error de E/S al guardar la imagen en '{}': {}", options.path, err)),
+        Err(err) => Err(format!("Error al guardar la imagen en '{}': {}", options.path, err)),
+    }
 }
 
 #[tauri::command]

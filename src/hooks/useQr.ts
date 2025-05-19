@@ -2,11 +2,13 @@ import { useToast } from '@/hooks/use-toast'
 import { invoke } from '@tauri-apps/api/core'
 import { useDialog } from './useDialog'
 import { useFs } from './useFs'
+import { useQrStore } from '@/store/qrStore'
 
 export const useQr = () => {
   const { toast } = useToast()
   const { saveImage } = useDialog()
   const { isExistFile } = useFs()
+  const removeContent = useQrStore((state) => state.removeContent)
 
   const createQR = async ({
     content,
@@ -47,8 +49,13 @@ export const useQr = () => {
     if (isExistFileInPath === false) {
       if (customImage === null) {
         const result = await invoke('create_qr', {
-          qrContent: content,
-          path: file,
+          options: {
+            content,
+            path: file,
+            level: 'M',
+            size: 512,
+            version: 20,
+          },
         })
 
         if (result === null) {
@@ -58,6 +65,8 @@ export const useQr = () => {
             duration: 2000,
           })
         }
+
+        removeContent()
       } else {
         const result = await invoke('qr_with_logo', {
           content: content,
@@ -71,6 +80,7 @@ export const useQr = () => {
             duration: 2000,
           })
         }
+        removeContent()
       }
     } else {
     }
