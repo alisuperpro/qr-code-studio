@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { useQrStore } from '@/store/qrStore'
-import { QrAdvancedOptions } from './QrAdvancedOptions'
 
 export const QrEmail = () => {
   const [email, setEmail] = useState('')
@@ -61,10 +60,6 @@ export const QrEmail = () => {
           value={body}
           onChange={(event) => handleBodyInput(event.target.value)}
         ></textarea>
-      </div>
-
-      <div className="flex justify-start items-start w-full px-4 py-2">
-        <QrAdvancedOptions />
       </div>
     </section>
   )

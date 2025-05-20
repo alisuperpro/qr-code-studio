@@ -31,8 +31,8 @@ fn create_qr(options: QrOptions) -> Result<(), String>{
 
 
     // Mapear la versión opcional a Option<Version>
-    let mut version;
-    let mut code;
+    let version;
+    let code;
     
     if (1..=40).contains(&options.version) {
         version = Version::Normal(options.version);
@@ -46,13 +46,6 @@ fn create_qr(options: QrOptions) -> Result<(), String>{
         Err(err) => return Err(format!("Error al crear el código QR con nivel de corrección {:?}: {}", ec_level, err)),
     };
     }
-
-
-    // Crear el código QR con el nivel de corrección especificado
-    /* let code = match QrCode::with_version(options.content.as_bytes(), Version::Normal(options.version.try_into().unwrap()), ec_level) {
-        Ok(code) => code,
-        Err(err) => return Err(format!("Error al crear el código QR con nivel de corrección {:?}: {}", ec_level, err)),
-    }; */
 
     // Renderizar la imagen con el tamaño especificado
     let image = code.render::<Luma<u8>>().max_dimensions(options.size, options.size).build();
@@ -69,45 +62,84 @@ fn create_qr(options: QrOptions) -> Result<(), String>{
 }
 
 #[tauri::command]
-fn qr_with_logo(content: String, logo_path: String, qr_path: String) {
-    // Corrected Version usage: Version::Auto is no longer directly available.
-    // We now use a version number or try to fit.  This example uses 21,
-    // which is often enough for a URL. You might need to adjust this.
-    let qrcode = QrCode::with_version(content, Version::Normal(8), EcLevel::Q).unwrap();
+fn qr_with_logo(
+    content: String,
+    logo_path: String,
+    qr_path: String,
+    version: i16,
+    ec_level: String,
+    qr_image_size: u32,
+    logo_size: u32,
+) -> Result<(), String> {
+    // Choose the error correction level
+    let qr_ec_level = match ec_level.to_lowercase().as_str() {
+        "l" => EcLevel::L,
+        "m" => EcLevel::M,
+        "q" => EcLevel::Q,
+        "h" => EcLevel::H,
+        _ => return Err("Nivel de corrección de error inválido. Debe ser 'L', 'M', 'Q' o 'H'.".into()),
+    };
 
-    // Corrected render method:  render_image is now render
+    // Generate the QR code
+    let qr_version;
+    let qrcode;
+
+    if (1..=40).contains(&version) {
+        qr_version = Version::Normal(version);
+        qrcode = match QrCode::with_version(content, qr_version, qr_ec_level) {
+        Ok(code) => code,
+        Err(err) => return Err(format!("Error al crear el código QR con nivel de corrección {:?}: {}", qr_ec_level, err)),
+    };
+    } else {
+        qrcode = match QrCode::with_error_correction_level(content, qr_ec_level) {
+        Ok(code) => code,
+        Err(err) => return Err(format!("Error al crear el código QR con nivel de corrección {:?}: {}", qr_ec_level, err)),
+    };
+    }
+
+    // Render the QR code to an image buffer
     let image = qrcode.render::<Luma<u8>>().build();
 
-    // Open the logo, handling potential errors
-    let logo_result = image::open(logo_path);
+    // Open the logo image
+    let logo_result = image::open(&logo_path);
     let logo = match logo_result {
-        Ok(l) => l,
-        Err(e) => {
-            eprintln!("Error opening logo: {}", e);
-            return; // Or handle the error in a more appropriate way
-        }
+        Ok(img) => img,
+        Err(e) => return Err(format!("Error al abrir el logo: {}", e)),
     };
 
     // Resize the logo
-    let resized_logo = logo.resize(150, 150, FilterType::Lanczos3);
+    let resized_logo = logo.resize(logo_size, logo_size, FilterType::Lanczos3);
 
-    // Get image dimensions AFTER building the image
-    let image_width = image.width();
-    let image_height = image.height();
+    // Convert the QR code image to DynamicImage for easier manipulation
+    let mut combined_image = DynamicImage::ImageLuma8(image);
+
+    // Calculate the position to center the logo
+    let image_width = combined_image.width();
+    let image_height = combined_image.height();
     let logo_width = resized_logo.width();
     let logo_height = resized_logo.height();
 
     let x = (image_width - logo_width) / 2;
     let y = (image_height - logo_height) / 2;
 
-    // Create a new DynamicImage to hold the combined image
-    let mut combined_image = DynamicImage::ImageLuma8(image);
+    // Copy the resized logo onto the QR code
+    if let Err(e) = combined_image.copy_from(&resized_logo, x, y) {
+        return Err(format!("Error al insertar el logo en el código QR: {}", e));
+    }
 
-    // Paste the resized logo onto the QR code
-    combined_image.copy_from(&resized_logo, x, y).unwrap();
+    // Resize the final combined image if needed
+    let final_image = if qr_image_size != image_width || qr_image_size != image_height {
+        combined_image.resize(qr_image_size, qr_image_size, FilterType::Lanczos3)
+    } else {
+        combined_image
+    };
 
-    // Save the image
-    combined_image.save(qr_path).unwrap();
+    // Save the final image
+    let save_result = final_image.save(&qr_path);
+    match save_result {
+        Ok(_) => Ok(()),
+        Err(e) => Err(format!("Error al guardar la imagen final en '{}': {}", qr_path, e)),
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

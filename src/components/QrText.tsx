@@ -1,5 +1,4 @@
 import { useQrStore } from '@/store/qrStore'
-import { QrAdvancedOptions } from './QrAdvancedOptions'
 
 export const QrText = () => {
   const setContent = useQrStore((state) => state.setContent)
@@ -13,9 +12,6 @@ export const QrText = () => {
         value={content}
         onChange={(event) => setContent(event.target.value)}
       ></textarea>
-      <div className="px-4 py-2">
-        <QrAdvancedOptions />
-      </div>
     </section>
   )
 }

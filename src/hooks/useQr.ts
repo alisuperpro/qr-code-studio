@@ -2,22 +2,31 @@ import { useToast } from '@/hooks/use-toast'
 import { invoke } from '@tauri-apps/api/core'
 import { useDialog } from './useDialog'
 import { useFs } from './useFs'
-import { useQrStore } from '@/store/qrStore'
+import { levelType, useQrStore } from '@/store/qrStore'
+import { useFileStore } from '@/store/fileStore'
 
 export const useQr = () => {
   const { toast } = useToast()
   const { saveImage } = useDialog()
   const { isExistFile } = useFs()
   const removeContent = useQrStore((state) => state.removeContent)
-
+  const resetImageInfo = useFileStore((state) => state.resetImageInfo)
   const createQR = async ({
     content,
     setIsLoad,
     customImage,
+    level,
+    version,
+    qrImageSize,
+    logoSize,
   }: {
     content: string | undefined
     setIsLoad: any
     customImage: any
+    level: levelType
+    version?: number
+    qrImageSize: number
+    logoSize: number
   }) => {
     const file = await saveImage()
     setIsLoad(true)
@@ -52,9 +61,9 @@ export const useQr = () => {
           options: {
             content,
             path: file,
-            level: 'M',
-            size: 512,
-            version: 20,
+            level,
+            size: qrImageSize,
+            version: version,
           },
         })
 
@@ -69,10 +78,15 @@ export const useQr = () => {
         removeContent()
       } else {
         const result = await invoke('qr_with_logo', {
-          content: content,
+          content,
           logoPath: customImage,
           qrPath: file,
+          version: version,
+          ecLevel: level,
+          qrImageSize,
+          logoSize,
         })
+
         if (result === null) {
           toast({
             title: 'QR Creado',
@@ -81,9 +95,12 @@ export const useQr = () => {
           })
         }
         removeContent()
+        resetImageInfo()
       }
     } else {
     }
+    resetImageInfo()
+    removeContent()
     setIsLoad(false)
   }
 

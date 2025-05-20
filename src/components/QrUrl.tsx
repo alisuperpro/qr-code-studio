@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import { ClipboardPaste } from 'lucide-react'
 import { Label } from './ui/label'
 import { useClipboard } from '@/hooks/useClipboard'
-import { QrAdvancedOptions } from './QrAdvancedOptions'
 import { useQrStore } from '@/store/qrStore'
 
 export const QrUrl = () => {
@@ -35,7 +34,6 @@ export const QrUrl = () => {
                 <ClipboardPaste /> Pegar
               </Button>
             </div>
-            <QrAdvancedOptions />
           </div>
         </div>
       </div>
