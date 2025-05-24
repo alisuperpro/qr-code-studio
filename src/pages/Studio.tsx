@@ -8,7 +8,7 @@ import { useQr } from '@/hooks/useQr'
 import { useFileStore } from '@/store/fileStore'
 import { useQrStore } from '@/store/qrStore'
 import { LoaderCircle, QrCode } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Router } from 'wouter'
 
 export const Studio = () => {
@@ -19,7 +19,7 @@ export const Studio = () => {
   const version = useQrStore((state) => state.version)
   const qrImageSize = useFileStore((state) => state.qrImageSize)
   const logoSize = useFileStore((state) => state.logoSize)
-  const { createQR } = useQr()
+  const { createQR, generateQrPreview, generateQrWithLogoPreview } = useQr()
 
   const handleButton = () => {
     createQR({
@@ -32,6 +32,21 @@ export const Studio = () => {
       logoSize,
     })
   }
+
+  useEffect(() => {
+    if (customImage !== null) {
+      generateQrWithLogoPreview({
+        content,
+        level,
+        size: qrImageSize,
+        version,
+        logoPath: customImage,
+        logoSize,
+      })
+    } else {
+      generateQrPreview({ content, level, size: qrImageSize, version })
+    }
+  }, [content, level, qrImageSize, version, customImage, logoSize])
 
   return (
     <section className="w-full h-full">
@@ -46,7 +61,7 @@ export const Studio = () => {
         <div className="col-span-2 w-full flex justify-center items-center gap-x-2 px-2 border-l-2 border-black">
           <div className="px-4">
             <div className="w-60">
-              <img src="/cm.png" alt="" />
+              <img src="/cm.png" id="qr-preview-image" alt="" />
             </div>
             <div>
               <Button
