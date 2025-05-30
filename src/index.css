@@ -621,12 +621,20 @@ body {
   position: relative;
 }
 
+.bottom-5 {
+  bottom: 1.25rem;
+}
+
 .right-1 {
   right: 0.25rem;
 }
 
 .right-2 {
   right: 0.5rem;
+}
+
+.right-\[45\%\] {
+  right: 45%;
 }
 
 .top-0 {
@@ -641,12 +649,28 @@ body {
   z-index: 50;
 }
 
+.z-\[-2\] {
+  z-index: -2;
+}
+
 .z-\[100\] {
   z-index: 100;
 }
 
 .col-span-2 {
   grid-column: span 2 / span 2;
+}
+
+.col-span-5 {
+  grid-column: span 5 / span 5;
+}
+
+.col-start-3 {
+  grid-column-start: 3;
+}
+
+.col-start-8 {
+  grid-column-start: 8;
 }
 
 .-mx-1 {
@@ -724,8 +748,8 @@ body {
   height: 24rem;
 }
 
-.h-\[90\%\] {
-  height: 90%;
+.h-\[70\%\] {
+  height: 70%;
 }
 
 .h-\[var\(--radix-select-trigger-height\)\] {
@@ -785,20 +809,25 @@ body {
   width: 2.25rem;
 }
 
-.w-96 {
-  width: 24rem;
+.w-\[150px\] {
+  width: 150px;
+}
+
+.w-\[200px\] {
+  width: 200px;
 }
 
 .w-\[220px\] {
   width: 220px;
 }
 
-.w-\[250px\] {
-  width: 250px;
-}
-
 .w-full {
   width: 100%;
+}
+
+.w-min {
+  width: -moz-min-content;
+  width: min-content;
 }
 
 .min-w-\[8rem\] {
@@ -809,8 +838,8 @@ body {
   min-width: var(--radix-select-trigger-width);
 }
 
-.flex-1 {
-  flex: 1 1 0%;
+.max-w-60 {
+  max-width: 15rem;
 }
 
 .shrink-0 {
@@ -853,8 +882,8 @@ body {
   resize: none;
 }
 
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.grid-cols-9 {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -959,14 +988,6 @@ body {
   border-width: 1px;
 }
 
-.border-l-2 {
-  border-left-width: 2px;
-}
-
-.border-l-\[1px\] {
-  border-left-width: 1px;
-}
-
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity, 1));
@@ -986,6 +1007,11 @@ body {
 
 .border-transparent {
   border-color: transparent;
+}
+
+.bg-\[\#000000\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
 }
 
 .bg-background {
@@ -1029,18 +1055,12 @@ body {
   background-color: transparent;
 }
 
-.bg-gradient-to-r {
-  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+.bg-\[radial-gradient\(\#ffffff33_1px\2c \#00091d_1px\)\] {
+  background-image: radial-gradient(#ffffff33 1px,#00091d 1px);
 }
 
-.from-gray-100 {
-  --tw-gradient-from: #f3f4f6 var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(243 244 246 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
-.to-gray-50 {
-  --tw-gradient-to: #f9fafb var(--tw-gradient-to-position);
+.bg-\[size\:20px_20px\] {
+  background-size: 20px 20px;
 }
 
 .p-1 {

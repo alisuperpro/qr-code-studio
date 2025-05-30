@@ -7,11 +7,11 @@ import { Studio } from './pages/Studio'
 function App() {
   return (
     <>
-      <div className="w-full h-screen flex flex-col">
-        <div className="flex flex-1 h-full">
+      <div className="w-full h-screen relative">
+        <div className="w-full h-screen">
           <Router />
         </div>
-        <div className="h-min flex py-2">
+        <div className="w-min h-min absolute bottom-5 right-[45%]">
           <Footer />
         </div>
       </div>
