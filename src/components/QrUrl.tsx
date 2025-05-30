@@ -27,7 +27,7 @@ export const QrUrl = () => {
                                         handlerUrl(event.target.value)
                                     }
                                     placeholder="https://cachemarketing.net/"
-                                    className="textarea-sizing w-60 max-w-60 max-h-40 resize-none px-2 py-2 outline-1 border-[1px] rounded-sm border-black"
+                                    className="textarea-sizing w-60 max-w-60 max-h-40 resize-none px-2 py-2 outline-1 border rounded-sm border-black"
                                 ></textarea>
                             </div>
                             <PasteTextButton setText={setUrl} />

@@ -37,7 +37,7 @@ export const QrEmail = () => {
           id="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className=" outline-1 border-[1px] rounded-sm border-black ml-3"
+          className=" outline-1 border rounded-sm border-black ml-3"
         />
       </div>
 
@@ -47,7 +47,7 @@ export const QrEmail = () => {
           type="text"
           name="subject"
           id="subject"
-          className=" outline-1 border-[1px] rounded-sm border-black"
+          className=" outline-1 border rounded-sm border-black"
           value={subject}
           onChange={(event) => handleSubjectInput(event.target.value)}
         />
@@ -55,7 +55,7 @@ export const QrEmail = () => {
       <div className="w-full">
         <textarea
           name="body"
-          className="w-full max-h-60 h-60 resize-none textarea-sizing shadow-md px-2 py-2  outline-1 border-[1px] rounded-sm border-black"
+          className="w-full max-h-60 h-60 resize-none textarea-sizing shadow-md px-2 py-2  outline-1 border rounded-sm border-black"
           value={body}
           onChange={(event) => handleBodyInput(event.target.value)}
         ></textarea>

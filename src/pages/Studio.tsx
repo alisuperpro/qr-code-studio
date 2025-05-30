@@ -6,7 +6,7 @@ import { StudioRouter } from '@/components/StudioRouter'
 
 export const Studio = () => {
     return (
-        <section className="w-full h-[100%] flex flex-col justify-center items-center">
+        <section className="w-full h-full flex flex-col justify-center items-center">
             <div className="">
                 <QrOptions />
             </div>

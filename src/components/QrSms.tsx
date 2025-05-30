@@ -28,7 +28,7 @@ export const QrSms = () => {
       </div>
       <div className="w-full">
         <textarea
-          className="textarea-sizing w-60 max-w-60 h-40 max-h-40 resize-none px-2 py-2 outline-1 border-[1px] rounded-sm border-black"
+          className="textarea-sizing w-60 max-w-60 h-40 max-h-40 resize-none px-2 py-2 outline-1 border rounded-sm border-black"
           onChange={(event) => setBody(event.target.value)}
           value={body}
         ></textarea>
