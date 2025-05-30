@@ -11,6 +11,7 @@ import { LoaderCircle, QrCode } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Route, Router } from 'wouter'
 import { QrNumberPhone } from '@/components/QrNumberPhone'
+import { QrSms } from '@/components/QrSms'
 
 export const Studio = () => {
   const customImage = useFileStore((state) => state.customImage)
@@ -102,6 +103,7 @@ const StudioRouter = () => {
         <Route path="/text" component={QrText} />
         <Route path="/email" component={QrEmail} />
         <Route path="/qr-number-phone" component={QrNumberPhone} />
+        <Route path="/sms" component={QrSms} />
       </Router>
     </>
   )
