@@ -50,7 +50,6 @@ export const Qr = () => {
                 className="w-full flex justify-center items-center"
                 id="image-container"
             >
-                {/* <img src="/cm.png" id="qr-preview-image" alt="" /> */}
                 <ImageZoom
                     imageUrl={'/cm.png'}
                     id="qr-preview-image"
