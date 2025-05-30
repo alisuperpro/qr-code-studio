@@ -2,15 +2,14 @@ import { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { useQrStore } from '@/store/qrStore'
+import { textToUrl } from '@/utils/functions'
 
 export const QrEmail = () => {
   const [email, setEmail] = useState('')
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const setContent = useQrStore((state) => state.setContent)
-  const textToUrl = (text: string) => {
-    return encodeURIComponent(text)
-  }
+
   useEffect(() => {
     const convert = `mailto:${email}?subject=${subject}&body=${body}`
 
