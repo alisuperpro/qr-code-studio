@@ -649,10 +649,6 @@ body {
   z-index: 50;
 }
 
-.z-\[-2\] {
-  z-index: -2;
-}
-
 .z-\[100\] {
   z-index: 100;
 }
@@ -726,6 +722,10 @@ body {
 
 .h-4 {
   height: 1rem;
+}
+
+.h-40 {
+  height: 10rem;
 }
 
 .h-5 {
@@ -1009,11 +1009,6 @@ body {
   border-color: transparent;
 }
 
-.bg-\[\#000000\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
-}
-
 .bg-background {
   background-color: hsl(var(--background));
 }
@@ -1053,14 +1048,6 @@ body {
 
 .bg-transparent {
   background-color: transparent;
-}
-
-.bg-\[radial-gradient\(\#ffffff33_1px\2c \#00091d_1px\)\] {
-  background-image: radial-gradient(#ffffff33 1px,#00091d 1px);
-}
-
-.bg-\[size\:20px_20px\] {
-  background-size: 20px 20px;
 }
 
 .p-1 {
