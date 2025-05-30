@@ -21,7 +21,7 @@ export const QrOptions = () => {
     },
     {
       text: 'Numero de telefono',
-      href: '/studio/qr-number-phone',
+      href: '/studio/number-phone',
       icon: Phone,
     },
     {

@@ -102,7 +102,7 @@ const StudioRouter = () => {
         <Route path="/" component={QrUrl} />
         <Route path="/text" component={QrText} />
         <Route path="/email" component={QrEmail} />
-        <Route path="/qr-number-phone" component={QrNumberPhone} />
+        <Route path="/number-phone" component={QrNumberPhone} />
         <Route path="/sms" component={QrSms} />
       </Router>
     </>
