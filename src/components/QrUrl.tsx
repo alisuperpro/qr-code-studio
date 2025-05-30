@@ -1,20 +1,11 @@
-import { Button } from '@/components/ui/button'
-import { ClipboardPaste } from 'lucide-react'
 import { Label } from './ui/label'
-import { useClipboard } from '@/hooks/useClipboard'
 import { useQrStore } from '@/store/qrStore'
 import { useState } from 'react'
+import { PasteTextButton } from './PasteTextButton'
 
 export const QrUrl = () => {
     const [url, setUrl] = useState('')
     const setContent = useQrStore((state) => state.setContent)
-    const { pasteText } = useClipboard()
-
-    const pasteLink = async (event: any) => {
-        event.preventDefault()
-        const text = await pasteText()
-        setContent(text)
-    }
 
     const handlerUrl = (value: string) => {
         setUrl(value)
@@ -39,9 +30,7 @@ export const QrUrl = () => {
                                     className="textarea-sizing w-60 max-w-60 max-h-40 resize-none px-2 py-2 outline-1 border-[1px] rounded-sm border-black"
                                 ></textarea>
                             </div>
-                            <Button onClick={pasteLink} className="my-2">
-                                <ClipboardPaste /> Pegar
-                            </Button>
+                            <PasteTextButton setText={setUrl} />
                         </div>
                     </div>
                 </div>

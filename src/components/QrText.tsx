@@ -1,5 +1,6 @@
 import { useQrStore } from '@/store/qrStore'
 import { useState } from 'react'
+import { PasteTextButton } from './PasteTextButton'
 
 export const QrText = () => {
     const [text, setText] = useState('')
@@ -18,6 +19,7 @@ export const QrText = () => {
                 value={text}
                 onChange={(event) => handlerText(event.target.value)}
             ></textarea>
+            <PasteTextButton setText={setText} />
         </section>
     )
 }
