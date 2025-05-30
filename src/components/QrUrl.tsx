@@ -19,7 +19,7 @@ export const QrUrl = () => {
       <div className="w-full">
         <div className=" flex justify-center items-center">
           <div className="flex justify-center items-center flex-col gap-y-2 ">
-            <div className="w-96">
+            <div className="">
               <Label htmlFor="url">URL</Label>
               <div className="w-full flex flex-row justify-center items-center gap-x-2">
                 <textarea
@@ -27,7 +27,7 @@ export const QrUrl = () => {
                   value={content}
                   onChange={(event) => setContent(event.target.value)}
                   placeholder="https://cachemarketing.net/"
-                  className="textarea-sizing w-full max-h-40 resize-none px-2 py-2 outline-1 border-[1px] rounded-sm border-black"
+                  className="textarea-sizing w-60 max-w-60 max-h-40 resize-none px-2 py-2 outline-1 border-[1px] rounded-sm border-black"
                 ></textarea>
               </div>
               <Button onClick={pasteLink} className="my-2">

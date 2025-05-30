@@ -16,7 +16,6 @@ import { useState } from 'react'
 import { Input } from './ui/input'
 
 export const QrAdvancedOptions = () => {
-  const customImage = useFileStore((state) => state.customImage)
   const setCustomImage = useFileStore((state) => state.setCustomImage)
   const { selectLogo } = useDialog()
   const setLevel = useQrStore((state) => state.setLevel)
@@ -27,6 +26,7 @@ export const QrAdvancedOptions = () => {
   const logoSize = useFileStore((state) => state.logoSize)
   const setLogoSize = useFileStore((state) => state.setLogoSize)
   const setQrImageSize = useFileStore((state) => state.setQrImageSize)
+  const [fitLogoPath, setFitLogoPath] = useState('')
 
   const selectCustomImage = async (event: any) => {
     event.preventDefault()
@@ -34,6 +34,11 @@ export const QrAdvancedOptions = () => {
     setCustomImage({ customImage: file })
     setQrVersion([5])
     setVersion(5)
+    if (file) {
+      const match = file.match(/[^\\/]+$/)
+      // @ts-ignore
+      setFitLogoPath(match[0] ?? '')
+    }
   }
 
   const handlerVersion = (value: number[]) => {
@@ -45,17 +50,16 @@ export const QrAdvancedOptions = () => {
   return (
     <div className="flex justify-start items-start w-full flex-col gap-y-2 mt-4">
       <h3 className="font-bold text-md">Opciones Avanzadas</h3>
-      <div className="w-full flex flex-row gap-x-2 justify-start items-center">
+      <div className="w-full flex flex-col gap-y-2 justify-start items-start">
         <Button onClick={selectCustomImage}>
-          {' '}
           <Image /> Elegir Imagen
         </Button>
-        {customImage && <Label>{customImage}</Label>}
+        {fitLogoPath && <Label>{fitLogoPath}</Label>}
       </div>
       <div>
         <Label>Seleccione un nivel de correccion</Label>
         <Select onValueChange={setLevel} value={level}>
-          <SelectTrigger className="w-[250px]">
+          <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="Nivel de correccion de error" />
           </SelectTrigger>
           <SelectContent>
@@ -70,7 +74,7 @@ export const QrAdvancedOptions = () => {
         <Label>Version del Qr</Label>
         <div className="flex flex-row gap-x-2 ">
           <Slider
-            className="w-[250px]"
+            className="w-[200px]"
             defaultValue={[1]}
             max={40}
             step={1}
