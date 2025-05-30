@@ -1,6 +1,6 @@
 import { Link } from 'wouter'
 import { Button } from './ui/button'
-import { LinkIcon, Mail, Type } from 'lucide-react'
+import { LinkIcon, Mail, Phone, Type } from 'lucide-react'
 
 export const QrOptions = () => {
   return (
@@ -13,6 +13,9 @@ export const QrOptions = () => {
       </Link>
       <Link href="/studio/email">
         <QrOption icon={<Mail />} text="Email" />
+      </Link>
+      <Link href="/studio/qr-number-phone">
+        <QrOption icon={<Phone />} text="Numero de telefono" />
       </Link>
     </section>
   )
