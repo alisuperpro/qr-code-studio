@@ -12,7 +12,7 @@ export const Studio = () => {
             </div>
 
             <div className="w-full h-full grid grid-cols-9 gap-x-2">
-                <div className="col-span-2">
+                <div className="col-span-2 mb-24">
                     <StudioRouter />
                 </div>
                 <div className="col-span-5 col-start-3">
